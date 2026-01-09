@@ -18,7 +18,7 @@ module Bundler
             deps.each do |d|
               next unless Bundler::Alias.aliases.include? d.name
 
-              puts "Replacing #{d.name} with #{Bundler::Alias.aliases[d.name]}."
+              puts "Gem dependency #{d.name} has been aliased to #{Bundler::Alias.aliases[d.name]}."
               d.name = Bundler::Alias.aliases[d.name]
             end
             deps
