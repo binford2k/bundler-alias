@@ -20,7 +20,7 @@ But what about when you depend on a gem like `puppet-strings` that has a transit
 dependency on `puppet`? You'll end up with both `openvox` and `puppet` installed.
 In this particular case, it's (probably) ok because glob order finds `openvox` first.
 But what if you want to test your module against both implementations or you're not
-lucky enough a lexicographically ordered name?
+lucky enough to have a lexicographically ordered name?
 
 That's actually not possible to do in a reasonable manner without this plugin.
 
