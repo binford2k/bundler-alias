@@ -10,7 +10,12 @@ module Bundler
         return if defined?(@registered) && @registered
         @registered = true
 
-        @aliases = Hash[Bundler.settings[:aliases].split(',').map {|i| i.split ':' } ]
+        if Bundler.settings[:aliases] and !Bundler.settings[:aliases].empty?
+          warn "Using configured aliases: #{Bundler.settings[:aliases]}"
+          @aliases = Hash[Bundler.settings[:aliases].split(',').map {|i| i.split ':' } ]
+        else
+          @aliases = []
+        end
 
         Bundler::Plugin.add_hook('before-install-all') do |deps|
           require "bundler/alias/dependency_patch"

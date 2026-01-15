@@ -48,7 +48,6 @@ actually test what you expect them to be testing.
 The specification for aliases is a comma separated list of colon separated aliases.
 This means `"source:target,source2:target2,source3:target3"` and so on.
 
-
 ### Global installation
 
 If you so choose, you can install and configure the plugin globally so that all
@@ -61,6 +60,17 @@ $ bundle plugin install "bundler-alias"
 $ bundle config set --global aliases 'puppet:openvox'
 ```
 
+### Version matching
+
+If a `Gemfile` specifies a gem version constraint that is not valid for the
+aliased gem then the installation will fail because the gem cannot be found. In
+this case, the recommended approach is to contribute a fix upstream to the
+original author. There is likely a reason why they specified that constraint.
+
+If this is not feasible for some reason, then you may consider using
+[`bundler-inject`](https://github.com/tarnowsc/bundler-override) to modify
+the dependencies and constraint specifications.
+
 ## Limitations
 
 This alias is not smart. It doesn't know anything about version numbers, or breaking
@@ -70,3 +80,8 @@ sufficient and code written for one gem will break on the other. In the case of
 *testing* that is acceptable because it means that tests break and surface the
 need for code updates. But if you're using this to band-aid over dependencies in
 production, be aware that it's a very thin and fragile veneer.
+
+## Credit
+
+This plugin takes a lot of inspiration, and even borrows a bit of code, from the
+[`bundler-inject`](https://github.com/tarnowsc/bundler-override) project.

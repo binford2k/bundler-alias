@@ -1,0 +1,44 @@
+name: rspec tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version:
+          - '3.2'
+          - '3.3'
+          - '3.4'
+        bundler-version:
+          - '2.4.19'
+          - '2.5.4'
+          - '2.6.0'
+          - '2.6.9'
+          - '2.7.2'
+
+    env:
+      TEST_BUNDLER_VERSION: ${{ matrix.bundler-version }}
+      CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler: ${{ matrix.bundler-version }}
+          bundler-cache: true
+        timeout-minutes: 30
+      - name: Run tests
+        run: bundle exec rspec
+

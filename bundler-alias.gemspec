@@ -21,11 +21,6 @@ Gem::Specification.new do |spec|
   end
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler",   "~> 1.16"
-  spec.add_development_dependency "rake",      "~> 13.0"
-  spec.add_development_dependency "rspec",     "~> 3.0"
-  spec.add_development_dependency "simplecov", ">= 0.21.2"
-
   spec.description       = <<-DESC
   This plugin allow you to select between multiple more or less equivalent gem
   implementations without requiring upstream accommodations. This is useful,
