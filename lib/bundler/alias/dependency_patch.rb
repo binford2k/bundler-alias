@@ -14,6 +14,7 @@ module Bundler
             override_dependencies(runtime_dependencies_alias) || []
           end
 
+          # As each gem is resolved from eg rubygems, this munges its dependency tree.
           def override_dependencies(deps)
             deps.each do |d|
               next unless Bundler::Alias.aliases.include? d.name
