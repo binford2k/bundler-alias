@@ -68,7 +68,7 @@ RSpec.describe Bundler::Alias do
       Bundler.settings.set_global(:aliases, nil)
       write_gemfile("gem 'puppet', '8.10.0'\ngem 'puppet-strings', '5.0.0'")
 
-      if RUBY_VERSION.split('.').first == 4
+      if RUBY_VERSION.to_i == 4
         bundle(:install, expect_error: true)
         expect(err).to include "Bundler::SolveFailure: Could not find compatible versions"
       else
