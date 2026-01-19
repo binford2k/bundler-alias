@@ -126,7 +126,7 @@ If a `Gemfile.lock` exists, then you'll need to update it to reference the Bundl
 version you just installed before proceeding with installing and using gems.
 
 ```
-$ bundle update --bundler
+$ bundle update --bundler=2.6.0.dev
 ```
 
 ## Credit
