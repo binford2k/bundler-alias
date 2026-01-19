@@ -24,6 +24,10 @@ lucky enough to have a lexicographically ordered name?
 
 That's actually not possible to do in a reasonable manner without this plugin.
 
+> [!IMPORTANT]
+> [See below](#required-bundler-version) for important information if you're attempting
+> to alias a directly declared gem without modifying the `Gemfile`.
+
 
 ## Usage
 
@@ -80,6 +84,50 @@ sufficient and code written for one gem will break on the other. In the case of
 *testing* that is acceptable because it means that tests break and surface the
 need for code updates. But if you're using this to band-aid over dependencies in
 production, be aware that it's a very thin and fragile veneer.
+
+### Required Bundler version
+
+There are four ways that this plugin will alias gems and their dependencies.
+
+1. During `bundle install`:
+    1. it will alias gems directly declared in your `Gemfile`.
+    2. it will alias the dependencies of those gems as they're resolved.
+2. During `bundle exec $cmd` (and other commands):
+    1. it will alias gems directly declared in your `Gemfile`.
+    2. it will alias the dependencies of those gems as they're resolved.
+
+The plugin hook providing the functionality for method `2.1` above is in
+[an unmerged pull request](https://github.com/ruby/rubygems/pull/6961) on the Bundler project.
+If you need this functionality, for example when testing a `puppetlabs` Puppet module
+on OpenVox with an unchanged `Gemfile`, then you'll need to build and install this
+specific version of Bundler.
+
+```
+$ git clone --depth 1 -b bundler-plugin-eval-hooks https://github.com/ccutrer/rubygems.git
+    Cloning into 'rubygems'...
+    remote: Enumerating objects: 4349, done.
+    remote: Counting objects: 100% (4349/4349), done.
+    remote: Compressing objects: 100% (2722/2722), done.
+    remote: Total 4349 (delta 973), reused 3122 (delta 812), pack-reused 0 (from 0)
+    Receiving objects: 100% (4349/4349), 13.47 MiB | 7.09 MiB/s, done.
+    Resolving deltas: 100% (973/973), done.
+$ cd rubygems/bundler
+$ gem build bundler.gemspec
+    Successfully built RubyGem
+    Name: bundler
+    Version: 2.6.0.dev
+    File: bundler-2.6.0.dev.gem
+$ gem install ./bundler-2.6.0.dev.gem
+    Successfully installed bundler-2.6.0.dev
+    1 gem installed
+```
+
+If a `Gemfile.lock` exists, then you'll need to update it to reference the Bundler
+version you just installed before proceeding with installing and using gems.
+
+```
+$ bundle update --bundler
+```
 
 ## Credit
 
