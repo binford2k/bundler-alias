@@ -68,9 +68,14 @@ RSpec.describe Bundler::Alias do
       Bundler.settings.set_global(:aliases, nil)
       write_gemfile("gem 'puppet', '8.10.0'\ngem 'puppet-strings', '5.0.0'")
 
-      bundle(:install)
-      expect(lockfile_spec_names).not_to include("openvox")
-      expect(lockfile_specs).to include(["puppet", "8.10.0"])
+      if RUBY_VERSION.split('.').first == 4
+        bundle(:install, expect_error: true)
+        expect(err).to include "Bundler::SolveFailure: Could not find compatible versions"
+      else
+        bundle(:install)
+        expect(lockfile_spec_names).not_to include("openvox")
+        expect(lockfile_specs).to include(["puppet", "8.10.0"])
+      end
     end
 
     it "in declared gem" do
